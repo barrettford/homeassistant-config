@@ -1,0 +1,165 @@
+default_view:
+# regular:
+  icon: mdi:home
+  view: yes
+  entities:
+  - group.locks
+  - group.people
+  - group.climate
+  - group.sirens
+  - group.lamps
+  - group.weather
+
+lamps:
+  name: Lamps
+  entities:
+  - switch.living_room
+  - switch.family_room
+  - switch.bedroom
+
+cameras:
+  name: Cameras
+  icon: mdi:camcorder
+  view: yes
+  entities:
+  - group.cameras_indoor
+  - group.cameras_outdoor
+  - camera.garagemjpg
+  
+climate:
+  entities:
+  - climate.thermostat
+  - sensor.thermostat_temperature
+  - sensor.thermostat_humidity
+  - binary_sensor.baby_room_occupancy
+  - sensor.baby_room_temperature
+  - binary_sensor.thermostat_occupancy
+  
+multisensors:
+  name: Multisensors
+  icon: mdi:radar
+  view: yes
+  entities:
+  - group.motion_sensors
+  - group.burglar_sensors
+  - group.temperature_sensors
+  - group.humidity_sensors
+  - group.luminance_sensors
+  - group.ultraviolet_sensors
+
+debug:
+  name: Debug
+  icon: mdi:bug
+  view: yes
+  entities:
+  - group.all_devices
+  
+# home:
+#   name: Home
+#   view: yes
+#   entities:
+  
+locks:
+  name: Locks
+  entities:
+  # - lock.kwikset_touchpad_electronic_deadbolt_locked_2_0
+  # - lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
+  # - lock.kwikset_touchpad_electronic_deadbolt_locked_4_0
+  # - lock.kwikset_touchpad_electronic_deadbolt_locked_5_0
+  - lock.front_door_lock_2_0
+  - lock.back_door_lock_3_0
+  - lock.kitchen_door_lock_4_0
+  - lock.garage_door_lock_5_0
+  
+motion_sensors:
+  name: Motion Sensors
+  entities:
+  - binary_sensor.aeotec_zw100_multisensor_6_sensor_8_0
+  - binary_sensor.aeotec_zw100_multisensor_6_sensor_9_0
+  - binary_sensor.aeotec_zw100_multisensor_6_sensor_10_0
+  - binary_sensor.aeotec_zw100_multisensor_6_sensor_11_0
+  
+temperature_sensors:
+  name: Temperature Sensors
+  entities:
+  - sensor.aeotec_zw100_multisensor_6_temperature_8_1
+  - sensor.aeotec_zw100_multisensor_6_temperature_9_1
+  - sensor.aeotec_zw100_multisensor_6_temperature_10_1
+  - sensor.aeotec_zw100_multisensor_6_temperature_11_1
+  
+humidity_sensors:
+  name: Humidity Sensors
+  entities:
+  - sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5
+  - sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5
+  - sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5
+  - sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5
+  
+burglar_sensors:
+  name: Burglar Sensors
+  entities:
+  - sensor.aeotec_zw100_multisensor_6_burglar_8_10
+  - sensor.aeotec_zw100_multisensor_6_burglar_9_10
+  - sensor.aeotec_zw100_multisensor_6_burglar_10_10
+  - sensor.aeotec_zw100_multisensor_6_burglar_11_10
+  
+luminance_sensors:
+  name: Luminance Sensors
+  entities:
+  - sensor.aeotec_zw100_multisensor_6_luminance_8_3
+  - sensor.aeotec_zw100_multisensor_6_luminance_9_3
+  - sensor.aeotec_zw100_multisensor_6_luminance_10_3
+  - sensor.aeotec_zw100_multisensor_6_luminance_11_3
+  
+ultraviolet_sensors:
+  name: Ultraviolet Sensors
+  entities:
+  - sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27
+  - sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27
+  - sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27
+  - sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27
+  
+
+
+people:
+  name: People
+  entities:
+  - device_tracker.barrett_barrettiphone
+  - device_tracker.erica_ericaiphone
+  - sensor.barretts_iphone_battery
+  - sensor.ericas_iphone_battery
+  
+cameras_indoor:
+  name: Indoor Cameras
+  entities:
+  - camera.dining_room
+  - camera.front_room
+  - camera.garage
+cameras_outdoor:
+  name: Outdoor Cameras
+  entities:
+  - camera.front_door
+  - camera.driveway
+  - camera.back_yard
+
+  
+sirens:
+  name: Sirens
+  entities:
+  - switch.aeotec_zw080_siren_gen5_switch_6_0
+  - switch.aeotec_zw080_siren_gen5_switch_7_0
+  
+weather:
+  entities:
+  - sun.sun
+  # - sensor.weather_icon
+  - sensor._temperature
+  - sensor._apparent_temperature
+  - sensor._wind_speed
+  - sensor._precip_probability
+  - sensor._precip_type
+  - sensor._minutely_summary
+  - sensor._hourly_summary
+  - sensor._daily_summary
+  - camera.ksl_utah_county_microcast
+  - camera.ksl_provo_7day_forecast

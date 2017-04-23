@@ -1,0 +1,308 @@
+homeassistant:
+  # Name of the location where Home Assistant is running
+  name: Home
+  # Location required to calculate the time the sun rises and sets
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  # Impacts weather/sunrise data
+  elevation: !secret home_elevation
+  # metric for Metric, imperial for Imperial
+  unit_system: imperial
+  # C for Celcius, F for Fahrenheit
+  temperature_unit: F
+  # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
+  time_zone: America/Denver
+  
+  customize: !include customize.yaml
+    # locks
+    # lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
+#       friendly_name: Front Door Lock
+#     lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
+#       friendly_name: Back Door Lock
+#     lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
+#       friendly_name: Kitchen Door Lock
+#     lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
+#       friendly_name: Garage Door Lock
+#     # phone batteries
+#     sensor.barretts_iphone_battery:
+#       icon: mdi:battery-70
+#     sensor.ericas_iphone_battery:
+#       icon: mdi:battery-70
+#     # sirens
+#     switch.aeotec_zw080_siren_gen5_switch_6_0:
+#       icon: mdi:bullhorn
+#     switch.aeotec_zw080_siren_gen5_switch_7_0:
+#       icon: mdi:bullhorn
+#     # humidity sensors
+#     sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5:
+#       icon: mdi:water-percent
+#     sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5:
+#       icon: mdi:water-percent
+#     sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5:
+#       icon: mdi:water-percent
+#     sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5:
+#       icon: mdi:water-percent
+#
+#     # UV sensors
+#     sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27:
+#       icon: mdi:radioactive
+#     sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27:
+#       icon: mdi:radioactive
+#     sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27:
+#       icon: mdi:radioactive
+#     sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27:
+#       icon: mdi:radioactive
+#
+#     # brightness sensors
+#     sensor.aeotec_zw100_multisensor_6_luminance_8_3:
+#       icon: mdi:brightness-4
+#     sensor.aeotec_zw100_multisensor_6_luminance_9_3:
+#       icon: mdi:brightness-4
+#     sensor.aeotec_zw100_multisensor_6_luminance_10_3:
+#       icon: mdi:brightness-4
+#     sensor.aeotec_zw100_multisensor_6_luminance_11_3:
+#       icon: mdi:brightness-4
+# Show links to resources in log and frontend
+#introduction:
+config:
+  
+zwave:
+  device_config: !include zwave_device_config.yaml
+  usb_path: /dev/ttyACM0
+
+# Enables the frontend
+frontend:
+
+# logger:
+#   default: critical
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_api_password
+  # ssl_certificate: /certs/fullchain.pem
+  # ssl_key: /certs/privkey.pem
+
+# Checks for available updates
+updater:
+
+# Discover some devices automatically
+# discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+conversation:
+
+# Enables support for tracking state changes over time.
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
+  
+ios:
+  
+ecobee:
+  api_key: !secret ecobee_api_key
+  hold_temp: false # optional, default is false
+  
+zone:
+- name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 40
+  icon: mdi:home
+
+- name: Work
+  latitude: !secret work_latitude
+  longitude: !secret work_longitude
+  radius: 270
+  icon: mdi:factory
+
+# Weather Prediction
+
+switch:
+- platform: mqtt
+  name: "Living Room"
+  state_topic: "home/sonoff/living_room/1/stat"
+  command_topic: "home/sonoff/living_room/1"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+- platform: mqtt
+  name: "Family Room"
+  state_topic: "home/sonoff/family_room/1/stat"
+  command_topic: "home/sonoff/family_room/1"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+- platform: mqtt
+  name: "Bedroom"
+  state_topic: "home/sonoff/bedroom/1/stat"
+  command_topic: "home/sonoff/bedroom/1"
+  qos: 1
+  payload_on: "on"
+  payload_off: "off"
+  retain: true
+    
+sensor:
+# - platform: synologydsm
+#   host: !secret synology_local_ip_1
+#   port: 5117
+#   username: !secret synology_username
+#   password: !secret synology_password
+#   monitored_conditions:
+#   - cpu_total_load
+#   - memory_real_usage
+#   - network_up
+#   - network_down
+#   - disk_temp
+#   - volume_status
+#   - volume_percentage_used
+
+- platform: darksky
+  api_key: !secret darksky_api_key
+  name: ""
+  monitored_conditions:
+  - icon
+  # - nearest_storm_distance
+  # - nearest_storm_bearing
+  - precip_type
+  # - precip_intensity
+  - precip_probability
+  - temperature
+  - apparent_temperature
+  # - dew_point
+  - wind_speed
+  # - wind_bearing
+  # - cloud_cover
+  - humidity
+  # - pressure
+  # - visibility
+  # - ozone
+  - minutely_summary
+  - hourly_summary
+  - daily_summary
+      
+      
+iPhone battery levels
+- platform: mqtt
+  state_topic: "owntracks/barrett/barrett-iphone"
+  name: "Barrett's iPhone Battery"
+  unit_of_measurement: "%"
+  value_template: '{{ value_json.batt }}'
+- platform: mqtt
+  state_topic: "owntracks/erica/erica-iphone"
+  name: "Erica's iPhone Battery"
+  unit_of_measurement: "%"
+  value_template: '{{ value_json.batt }}'
+  
+mqtt:
+  broker: mqtt-broker
+  port: 1883
+  client_id: home-assistant
+  keepalive: 60
+  protocol: 3.1
+
+device_tracker:
+- platform: netgear
+  host: routerlogin.net
+  username: !secret device_tracker_netgear_username
+  password: !secret device_tracker_netgear_password
+  port: 5000
+  # Optional configuration
+
+  # If new discovered devices are tracked by default (default: yes)
+  track_new_devices: no
+  # Seconds between each scan for new devices (default: 12)
+  interval_seconds: 12
+  # Seconds to wait till marking someone as not home after not being seen
+  # (default: 180)
+  consider_home: 180
+
+- platform: owntracks
+  max_gps_accuracy: 100
+  track_new_devices: yes
+  interval_seconds: 40
+  consider_home: 120
+
+zoneminder:
+  host: !secret zoneminder_host
+  # path: /zm
+  # path_zms: /zm/cgi-bin/nph-zms
+  # ssl: False
+  username: !secret camera_username
+  password: !secret camera_password
+
+camera:
+- platform: zoneminder
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.10/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Front Room
+  username: !secret camera_username
+  password: !secret camera_password
+# - platform: mjpeg
+#   mjpeg_url: http://192.168.2.11/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+#   name: Dining Room
+#   username: !secret camera_username
+#   password: !secret camera_password
+# - platform: mjpeg
+#   mjpeg_url: http://192.168.2.12/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+#   name: Garage
+#   username: !secret camera_username
+#   password: !secret camera_password
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.20/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Front Door
+  username: !secret camera_username
+  password: !secret camera_password
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.21/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Driveway
+  username: !secret camera_username
+  password: !secret camera_password
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.22/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Back Yard
+  username: !secret camera_username
+  password: !secret camera_password
+
+- platform: local_file
+  name: KSL Utah County Microcast
+  file_path: /config/download/microProvo_new.jpg
+- platform: local_file
+  name: KSL Provo 7-day Forecast
+  file_path: /config/download/7provo_new.jpg
+
+shell_command:
+  micro_provo: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/microProvo_new.jpg
+  provo_7day: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/7provo_new.jpg
+  reboot: !secret reboot_command
+
+automation:
+- trigger:
+    platform: time
+    # Matches every hour at 5 minutes past whole
+    hours: '/2'
+    # minutes: '/5'
+    minutes: 0
+    seconds: 0
+  action:
+  - service: shell_command.micro_provo
+  - service: shell_command.provo_7day
+  
+- alias: Minimote Button 1 Pressed
+  trigger:
+    platform: event
+    event_type: zwave.scene_activated
+    event_data:
+      entity_id: aeotec_minimote_30
+      scene_id: 1
+  action:
+    service: lock.unlock
+    entity_id: lock.kwikset_touchpad_electronic_deadbolt_locked_3
+
+
+group: !include group.yaml
