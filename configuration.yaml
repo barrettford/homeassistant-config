@@ -14,56 +14,7 @@ homeassistant:
   time_zone: America/Denver
   
   customize: !include customize.yaml
-    # locks
-    # lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
-#       friendly_name: Front Door Lock
-#     lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
-#       friendly_name: Back Door Lock
-#     lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
-#       friendly_name: Kitchen Door Lock
-#     lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
-#       friendly_name: Garage Door Lock
-#     # phone batteries
-#     sensor.barretts_iphone_battery:
-#       icon: mdi:battery-70
-#     sensor.ericas_iphone_battery:
-#       icon: mdi:battery-70
-#     # sirens
-#     switch.aeotec_zw080_siren_gen5_switch_6_0:
-#       icon: mdi:bullhorn
-#     switch.aeotec_zw080_siren_gen5_switch_7_0:
-#       icon: mdi:bullhorn
-#     # humidity sensors
-#     sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5:
-#       icon: mdi:water-percent
-#     sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5:
-#       icon: mdi:water-percent
-#     sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5:
-#       icon: mdi:water-percent
-#     sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5:
-#       icon: mdi:water-percent
-#
-#     # UV sensors
-#     sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27:
-#       icon: mdi:radioactive
-#     sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27:
-#       icon: mdi:radioactive
-#     sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27:
-#       icon: mdi:radioactive
-#     sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27:
-#       icon: mdi:radioactive
-#
-#     # brightness sensors
-#     sensor.aeotec_zw100_multisensor_6_luminance_8_3:
-#       icon: mdi:brightness-4
-#     sensor.aeotec_zw100_multisensor_6_luminance_9_3:
-#       icon: mdi:brightness-4
-#     sensor.aeotec_zw100_multisensor_6_luminance_10_3:
-#       icon: mdi:brightness-4
-#     sensor.aeotec_zw100_multisensor_6_luminance_11_3:
-#       icon: mdi:brightness-4
-# Show links to resources in log and frontend
-#introduction:
+
 config:
   
 zwave:
@@ -187,7 +138,7 @@ sensor:
   - daily_summary
       
       
-iPhone battery levels
+# iPhone battery levels
 - platform: mqtt
   state_topic: "owntracks/barrett/barrett-iphone"
   name: "Barrett's iPhone Battery"
@@ -243,11 +194,11 @@ camera:
   name: Front Room
   username: !secret camera_username
   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.11/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Dining Room
-#   username: !secret camera_username
-#   password: !secret camera_password
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.11/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Dining Room
+  username: !secret camera_username
+  password: !secret camera_password
 # - platform: mjpeg
 #   mjpeg_url: http://192.168.2.12/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
 #   name: Garage
@@ -279,7 +230,7 @@ camera:
 shell_command:
   micro_provo: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/microProvo_new.jpg
   provo_7day: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/7provo_new.jpg
-  reboot: !secret reboot_command
+  # reboot: !secret reboot_command
 
 automation:
 - trigger:
