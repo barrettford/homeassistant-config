@@ -62,14 +62,10 @@ debug:
 locks:
   name: Locks
   entities:
-  # - lock.kwikset_touchpad_electronic_deadbolt_locked_2_0
-  # - lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
-  # - lock.kwikset_touchpad_electronic_deadbolt_locked_4_0
-  # - lock.kwikset_touchpad_electronic_deadbolt_locked_5_0
-  - lock.front_door_lock_2_0
-  - lock.back_door_lock_3_0
-  - lock.kitchen_door_lock_4_0
-  - lock.garage_door_lock_5_0
+  - lock.kwikset_touchpad_electronic_deadbolt_locked_2_0
+  - lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
+  - lock.kwikset_touchpad_electronic_deadbolt_locked_4_0
+  - lock.kwikset_touchpad_electronic_deadbolt_locked_5_0
   
 motion_sensors:
   name: Motion Sensors
