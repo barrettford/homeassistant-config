@@ -156,6 +156,14 @@ mqtt:
   client_id: home-assistant
   keepalive: 60
   protocol: 3.1
+  
+media_player:
+- platform: kodi
+  host: 192.168.1.102
+  name: ProtoPie
+  username: !secret raspberry_pie_username
+  password: !secret raspberry_pie_password
+  turn_off_action: suspend
 
 device_tracker:
 - platform: netgear
