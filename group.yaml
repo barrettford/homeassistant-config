@@ -132,6 +132,7 @@ cameras_indoor:
   - camera.dining_room
   - camera.front_room
   - camera.garage
+  - camera.garage_cam
 cameras_outdoor:
   name: Outdoor Cameras
   entities:

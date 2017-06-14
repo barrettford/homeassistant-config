@@ -24,7 +24,8 @@ zwave:
 # Enables the frontend
 frontend:
 
-# logger:
+logger:
+  default: info
 #   default: critical
 
 http:
@@ -99,19 +100,19 @@ switch:
   retain: true
     
 sensor:
-# - platform: synologydsm
-#   host: !secret synology_local_ip_1
-#   port: 5117
-#   username: !secret synology_username
-#   password: !secret synology_password
-#   monitored_conditions:
-#   - cpu_total_load
-#   - memory_real_usage
-#   - network_up
-#   - network_down
-#   - disk_temp
-#   - volume_status
-#   - volume_percentage_used
+- platform: synologydsm
+  host: !secret synology_local_ip_1
+  port: !secret synology_http_port
+  username: !secret synology_username
+  password: !secret synology_password
+  monitored_conditions:
+  - cpu_total_load
+  - memory_real_usage
+  - network_up
+  - network_down
+  - disk_temp
+  - volume_status
+  - volume_percentage_used
 
 - platform: darksky
   api_key: !secret darksky_api_key
@@ -187,16 +188,18 @@ device_tracker:
   interval_seconds: 40
   consider_home: 120
 
-zoneminder:
-  host: !secret zoneminder_host
-  # path: /zm
-  # path_zms: /zm/cgi-bin/nph-zms
-  # ssl: False
-  username: !secret camera_username
-  password: !secret camera_password
+# zoneminder:
+#   host: !secret zoneminder_host
+#   # path: /zm
+#   # path_zms: /zm/cgi-bin/nph-zms
+#   # ssl: False
+#   username: !secret camera_username
+#   password: !secret camera_password
+
+
 
 camera:
-- platform: zoneminder
+# - platform: zoneminder
 - platform: mjpeg
   mjpeg_url: http://192.168.2.10/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
   name: Front Room
@@ -207,11 +210,11 @@ camera:
   name: Dining Room
   username: !secret camera_username
   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.12/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Garage
-#   username: !secret camera_username
-#   password: !secret camera_password
+- platform: mjpeg
+  mjpeg_url: http://192.168.2.12/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
+  name: Garage
+  username: !secret camera_username
+  password: !secret camera_password
 - platform: mjpeg
   mjpeg_url: http://192.168.2.20/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
   name: Front Door
@@ -227,6 +230,13 @@ camera:
   name: Back Yard
   username: !secret camera_username
   password: !secret camera_password
+  
+
+# - platform: synology
+#   url: !secret synology_url
+#   username: !secret synology_username
+#   password: !secret synology_password
+#   verify_ssl: False
 
 - platform: local_file
   name: KSL Utah County Microcast
@@ -241,7 +251,8 @@ shell_command:
   # reboot: !secret reboot_command
 
 automation:
-- trigger:
+- alias: scrape ksl
+  trigger:
     platform: time
     # Matches every hour at 5 minutes past whole
     hours: '/2'
@@ -257,11 +268,36 @@ automation:
     platform: event
     event_type: zwave.scene_activated
     event_data:
-      entity_id: aeotec_minimote_30
+      entity_id: zwave.aeotec_dsa03202_minimote_12
       scene_id: 1
   action:
     service: lock.unlock
-    entity_id: lock.kwikset_touchpad_electronic_deadbolt_locked_3
+    entity_id: lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
+    
+- alias: Family Away - Lock doors
+  trigger:
+    platform: state
+    entity_id: group.people
+    to: 'not_home'
+    from: 'home'
+  action:
+    service: lock.lock
+    entity_id: group.locks
+    
+- alias: Family Away - Arm Alarms
+  condition:
+  - condition: state
+    entity_id: group.people
+    state: 'not_home'
+  trigger:
+  - platform: state
+    entity_id: group.motion_sensors
+    to: 'on'
+    from: 'off'
+  action:
+  - service: lock.lock
+    entity_id: group.locks
+    
 
 
 group: !include group.yaml
