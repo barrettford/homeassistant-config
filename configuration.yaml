@@ -171,70 +171,18 @@ sensor:
   - minutely_summary
   - hourly_summary
   - daily_summary
-      
-      
-# iPhone battery levels
-# - platform: template
-#   name: Barrett's iPhone Battery
-#   sensors:
-#     battery_barretts_iphone:
-#       unit_of_measurement: '%'
-#       value_template: >-
-#           {%- if states.device_tracker.barretts_iphone.attributes.battery %}
-#               {{ states.device_tracker.barretts_iphone.attributes.battery|round }}
-#           {% else %}
-#               {{ states.sensor.battery_barretts_iphone.state }}
-#           {%- endif %}
-# - platform: template
-#   name: Erica's iPhone Battery
-#   sensors:
-#     battery_ericas_iphone:
-#       unit_of_measurement: '%'
-#       value_template: >-
-#           {%- if states.device_tracker.ericas_iphone.attributes.battery %}
-#               {{ states.device_tracker.ericas_iphone.attributes.battery|round }}
-#           {% else %}
-#               {{ states.sensor.battery_ericas_iphone.state }}
-#           {%- endif %}
-# - platform: mqtt
-#   state_topic: "owntracks/barrett/barrett-iphone"
-#   name: "Barrett's iPhone Battery"
-#   unit_of_measurement: "%"
-#   value_template: '{{ value_json.batt }}'
-# - platform: mqtt
-#   state_topic: "owntracks/erica/erica-iphone"
-#   name: "Erica's iPhone Battery"
-#   unit_of_measurement: "%"
-#   value_template: '{{ value_json.batt }}'
-# binary_sensor:
-# - platform: template
-#   sensors:
-#     people_home:
-#       value_template: >-
-#         {%- if is_state("device_tracker.barretts_iphone", "home")
-#         or is_state("device_tracker.ericas_iphone", "home")
-#         or is_state("binary_sensor.office_124", "on")
-#         or is_state("binary_sensor.hallway_134", "on")
-#         or is_state("binary_sensor.living_room_139", "on")
-#         or is_state("binary_sensor.porch_ms6_1_129", "on")
-#         or is_state("binary_sensor.family_room_144", "on")
-#             -%}
-#         True
-#         {%- else -%}
-#         False
-#         {%- endif %}
-#       entity_id:
-#       - device_tracker.barretts_iphone
-#       - device_tracker.susan
-#       - binary_sensor.office_124
-#       - binary_sensor.hallway_134
-#       - binary_sensor.living_room_139
-#       - binary_sensor.porch_ms6_1_129
-#       - binary_sensor.family_room_144
 
 binary_sensor:
 - platform: template
   sensors:
+    # barrett_iphone_is_home:
+    #   value_template: "{%- is_state("device_tracker.barretts_iphone", "home") -%}"
+    #   entity_id:
+    #   - device_tracker.barretts_iphone
+    # erica_iphone_is_home:
+    #   value_template: "{%- is_state("device_tracker.ericas_iphone", "home") -%}"
+    #   entity_id:
+    #   - device_tracker.ericas_iphone
     home_secure:
       value_template: >-
         {%- if is_state("lock.front_door_lock_locked_2_0", "unlocked")
@@ -251,7 +199,7 @@ binary_sensor:
       - lock.back_door_lock_locked_3_0
       - lock.kitchen_door_lock_locked_4_0
       - lock.garage_door_lock_locked_5_0
-  
+
 mqtt:
   broker: mqtt-broker
   port: 1883
@@ -408,9 +356,9 @@ automation:
     
 - alias: Barrett Last to Leave Home - Lock doors
   condition:
-  - condition: state
+  - condition: template
+    value_template: "{{ not is_state('device_tracker.ericas_iphone', 'home') }}"
     entity_id: device_tracker.ericas_iphone
-    state: 'not_home'
   - condition: state
     entity_id: binary_sensor.home_secure
     state: 'off'
@@ -418,7 +366,6 @@ automation:
     platform: state
     entity_id: device_tracker.barretts_iphone
     from: 'home'
-    to: 'not_home'
   action:
     service: notify.ios_barretts_iphone
     data:
