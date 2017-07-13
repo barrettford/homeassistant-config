@@ -358,14 +358,15 @@ automation:
   condition:
   - condition: template
     value_template: "{{ not is_state('device_tracker.ericas_iphone', 'home') }}"
-    entity_id: device_tracker.ericas_iphone
   - condition: state
     entity_id: binary_sensor.home_secure
     state: 'off'
   trigger:
-    platform: state
+    platform: zone
     entity_id: device_tracker.barretts_iphone
-    from: 'home'
+    zone: zone.home
+    # Event is either enter or leave
+    event: leave  # or "enter"
   action:
     service: notify.ios_barretts_iphone
     data:
