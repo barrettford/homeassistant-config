@@ -63,10 +63,10 @@ debug:
 locks:
   name: Locks
   entities:
-  - lock.kwikset_touchpad_electronic_deadbolt_locked_2_0
-  - lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
-  - lock.kwikset_touchpad_electronic_deadbolt_locked_4_0
-  - lock.kwikset_touchpad_electronic_deadbolt_locked_5_0
+  - lock.front_door_lock_locked_2_0
+  - lock.back_door_lock_locked_3_0
+  - lock.kitchen_door_lock_locked_4_0
+  - lock.garage_door_lock_locked_5_0
   
 motion_sensors:
   name: Motion Sensors
@@ -121,24 +121,23 @@ ultraviolet_sensors:
 people:
   name: People
   entities:
-  - device_tracker.barrett_barrettiphone
-  - device_tracker.erica_ericaiphone
-  - sensor.barretts_iphone_battery
-  - sensor.ericas_iphone_battery
+  - device_tracker.barretts_iphone
+  - sensor.barretts_iphone_battery_level
+  - device_tracker.ericas_iphone
+  - sensor.ericas_iphone_battery_level
   
 cameras_indoor:
   name: Indoor Cameras
   entities:
-  - camera.dining_room
   - camera.front_room
+  - camera.dining_room
   - camera.garage
-  - camera.garage_cam
 cameras_outdoor:
   name: Outdoor Cameras
   entities:
   - camera.front_door
   - camera.driveway
-  - camera.back_yard
+  - camera.backyard
 
   
 sirens:

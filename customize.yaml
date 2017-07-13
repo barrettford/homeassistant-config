@@ -1,17 +1,17 @@
 # locks
-lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
-  friendly_name: Front Door Lock
-lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
-  friendly_name: Back Door Lock
-lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
-  friendly_name: Kitchen Door Lock
-lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
-  friendly_name: Garage Door Lock
+# lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
+#   friendly_name: Front Door Lock
+# lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
+#   friendly_name: Back Door Lock
+# lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
+#   friendly_name: Kitchen Door Lock
+# lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
+#   friendly_name: Garage Door Lock
 # phone batteries
-sensor.barretts_iphone_battery:
-  icon: mdi:battery-70
-sensor.ericas_iphone_battery:
-  icon: mdi:battery-70
+# sensor.barretts_iphone_battery:
+#   icon: mdi:battery-70
+# sensor.ericas_iphone_battery:
+#   icon: mdi:battery-70
 # sirens
 switch.aeotec_zw080_siren_gen5_switch_6_0:
   icon: mdi:bullhorn
@@ -46,3 +46,6 @@ sensor.aeotec_zw100_multisensor_6_luminance_10_3:
   icon: mdi:brightness-4
 sensor.aeotec_zw100_multisensor_6_luminance_11_3:
   icon: mdi:brightness-4
+  
+binary_sensor.home_secure:
+  device_class: lock
