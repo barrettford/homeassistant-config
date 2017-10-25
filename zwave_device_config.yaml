@@ -1,63 +1,21 @@
-# GE dimmers need to be refreshed on a delay
-# lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
-#   refresh_value: true
-#   delay: 2
-# lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
-#   refresh_value: true
-#   delay: 2
-# lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
-#   refresh_value: true
-#   delay: 2
-# lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
-#   refresh_value: true
-#   delay: 2
+# This file needs to begin indented 2 spaces
 
+# Deadbolts
+  lock.back_deadbolt_locked:
+    refresh_value: true
+    delay: 2
+  lock.front_deadbolt_locked:
+    refresh_value: true
+    delay: 2
+  lock.garage_deadbolt_locked:
+    refresh_value: true
+    delay: 2
+  lock.kitchen_deadbolt_locked:
+    refresh_value: true
+    delay: 2
 
-
-# lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
-#   friendly_name: Front Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
-#   friendly_name: Back Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
-#   friendly_name: Kitchen Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
-#   friendly_name: Garage Door Lock
 # # phone batteries
 # sensor.barretts_iphone_battery:
 #   icon: mdi:battery-70
 # sensor.ericas_iphone_battery:
 #   icon: mdi:battery-70
-# # sirens
-# switch.aeotec_zw080_siren_gen5_switch_6_0:
-#   icon: mdi:bullhorn
-# switch.aeotec_zw080_siren_gen5_switch_7_0:
-#   icon: mdi:bullhorn
-# # humidity sensors
-# sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5:
-#   icon: mdi:water-percent
-# sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5:
-#   icon: mdi:water-percent
-# sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5:
-#   icon: mdi:water-percent
-# sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5:
-#   icon: mdi:water-percent
-#
-# # UV sensors
-# sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27:
-#   icon: mdi:radioactive
-# sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27:
-#   icon: mdi:radioactive
-# sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27:
-#   icon: mdi:radioactive
-# sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27:
-#   icon: mdi:radioactive
-#
-# # brightness sensors
-# sensor.aeotec_zw100_multisensor_6_luminance_8_3:
-#   icon: mdi:brightness-4
-# sensor.aeotec_zw100_multisensor_6_luminance_9_3:
-#   icon: mdi:brightness-4
-# sensor.aeotec_zw100_multisensor_6_luminance_10_3:
-#   icon: mdi:brightness-4
-# sensor.aeotec_zw100_multisensor_6_luminance_11_3:
-#   icon: mdi:brightness-4

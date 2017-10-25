@@ -1,51 +1,56 @@
-# locks
-# lock.kwikset_touchpad_electronic_deadbolt_locked_2_0:
-#   friendly_name: Front Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_3_0:
-#   friendly_name: Back Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_4_0:
-#   friendly_name: Kitchen Door Lock
-# lock.kwikset_touchpad_electronic_deadbolt_locked_5_0:
-#   friendly_name: Garage Door Lock
-# phone batteries
-# sensor.barretts_iphone_battery:
-#   icon: mdi:battery-70
-# sensor.ericas_iphone_battery:
-#   icon: mdi:battery-70
-# sirens
-switch.aeotec_zw080_siren_gen5_switch_6_0:
-  icon: mdi:bullhorn
-switch.aeotec_zw080_siren_gen5_switch_7_0:
-  icon: mdi:bullhorn
-# humidity sensors
-sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5:
-  icon: mdi:water-percent
-sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5:
-  icon: mdi:water-percent
-sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5:
-  icon: mdi:water-percent
-sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5:
-  icon: mdi:water-percent
+    # Multi Sensor Rename
+#Motion Sensor Rename
+binary_sensor.dining_room_sensor:
+  friendly_name: Dining Room Motion
+  device_class: motion
+binary_sensor.downstairs_sensor:
+  friendly_name: Downstairs Motion
+  device_class: motion
+binary_sensor.front_room_sensor:
+  friendly_name: Front Room Motion
+  device_class: motion
+binary_sensor.garage_sensor:
+  friendly_name: Garage Motion
+  device_class: motion
 
+# Humidity Sensor Rename
+sensor.dining_room_relative_humidity:
+  friendly_name: Dining Room Humidity
+  icon: mdi:water-percent
+sensor.downstairs_relative_humidity:
+  friendly_name: Downstairs Humidity
+  icon: mdi:water-percent
+sensor.front_room_relative_humidity:
+  friendly_name: Front Room Humidity
+  icon: mdi:water-percent
+sensor.garage_relative_humidity:
+  friendly_name: Garage Humidity
+  icon: mdi:water-percent
+  
 # UV sensors
-sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27:
+sensor.dining_room_ultraviolet:
   icon: mdi:radioactive
-sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27:
+sensor.downstairs_ultraviolet:
   icon: mdi:radioactive
-sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27:
+sensor.front_room_ultraviolet:
   icon: mdi:radioactive
-sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27:
+sensor.garage_ultraviolet:
   icon: mdi:radioactive
-
-# brightness sensors
-sensor.aeotec_zw100_multisensor_6_luminance_8_3:
+  
+# Brightness sensors
+sensor.dining_room_luminance:
   icon: mdi:brightness-4
-sensor.aeotec_zw100_multisensor_6_luminance_9_3:
+sensor.downstairs_luminance:
   icon: mdi:brightness-4
-sensor.aeotec_zw100_multisensor_6_luminance_10_3:
+sensor.front_room_luminance:
   icon: mdi:brightness-4
-sensor.aeotec_zw100_multisensor_6_luminance_11_3:
+sensor.garage_luminance:
   icon: mdi:brightness-4
   
-binary_sensor.home_secure:
-  device_class: lock
+# Siren Rename
+switch.bedroom_siren_switch:
+  friendly_name: Bedroom Siren
+  icon: mdi:bullhorn
+switch.kitchen_siren_switch:
+  friendly_name: Kitchen Siren
+  icon: mdi:bullhorn

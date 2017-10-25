@@ -1,0 +1,169 @@
+- id: scrape_ksl
+  alias: Scrape KSL 7-Day Forecast
+  trigger:
+    platform: time
+    # Matches every hour at 5 minutes past whole
+    hours: '/2'
+    # minutes: '/5'
+    minutes: 0
+    seconds: 0
+  action:
+  - service: shell_command.micro_provo
+  - service: shell_command.provo_7day
+
+- id: erica_last_to_leave_home
+  alias: Erica Last to Leave Home - Lock doors
+  condition:
+  - condition: state
+    entity_id: device_tracker.barretts_iphone
+    state: 'not_home'
+  - condition: state
+    entity_id: binary_sensor.home_secure
+    state: 'off'
+  trigger:
+    platform: state
+    entity_id: device_tracker.ericas_iphone
+    from: 'home'
+    to: 'not_home'
+  action:
+    service: notify.ios_ericas_iphone
+    data:
+      message: "Doors were left unlocked!"
+      data:
+        push:
+          # badge: 1
+          # sound: <SOUND FILE HERE>
+          category: LOCK # Needs to match the top level identifier you used in the ios configuration
+        action_data: # Anything passed in action_data will get echoed back to Home Assistant.
+        #   entity_id: light.test
+        #   my_custom_data: foo_bar
+- id: barrett_last_to_leave_home
+  alias: Barrett Last to Leave Home - Lock doors
+  condition:
+  - condition: template
+    value_template: "{{ not is_state('device_tracker.ericas_iphone', 'home') }}"
+  - condition: state
+    entity_id: binary_sensor.home_secure
+    state: 'off'
+  trigger:
+    platform: zone
+    entity_id: device_tracker.barretts_iphone
+    zone: zone.home
+    # Event is either enter or leave
+    event: leave  # or "enter"
+  action:
+    service: notify.ios_barretts_iphone
+    data:
+      message: "Doors were left unlocked!"
+      data:
+        push:
+          # badge: 1
+          # sound: <SOUND FILE HERE>
+          category: LOCK # Needs to match the top level identifier you used in the ios configuration
+        action_data: # Anything passed in action_data will get echoed back to Home Assistant.
+        #   entity_id: light.test
+        #   my_custom_data: foo_bar
+
+- id: lock_doors
+  alias: Lock the Doors
+  trigger:
+    platform: event
+    event_type: ios.notification_action_fired
+    event_data:
+      actionName: LOCK_DOORS
+  action:
+    service: lock.lock
+    entity_id: group.locks
+# - alias: Family Away - Arm Alarms
+#   condition:
+#   - condition: state
+#     entity_id: group.people
+#     state: 'not_home'
+#   trigger:
+#   - platform: state
+#     entity_id: group.motion_sensors
+#     to: 'on'
+#     from: 'off'
+#   action:
+#   - service: lock.lock
+#     entity_id: group.locks
+  # - service: persistent_notification.create
+  #   data:
+  #     message: >
+  #       Motion Trackers went from {{ trigger.from_state.state }}
+  #       to {{ trigger.to_state.state }}
+  #     title: "ALARM!"
+  
+  
+# Minimote Config
+# - id: mini_1_pressed
+#   alias: 'Minimote Button 1 Pressed'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 1
+#
+# - id: mini_1_held
+#   alias: 'Minimote Button 1 Held'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 2
+#
+# - id: mini_2_pressed
+#   alias: 'Minimote Button 2 Pressed'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 3
+#
+# - id: mini_2_held
+#   alias: 'Minimote Button 2 Held'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 4
+#
+# - id: mini_3_pressed
+#   alias: 'Minimote Button 3 Pressed'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 5
+#
+# - id: mini_3_held
+#   alias: 'Minimote Button 3 Held'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 6
+#
+# - id: mini_4_pressed
+#   alias: 'Minimote Button 4 Pressed'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 7
+#
+# - id: mini_4_held
+#   alias: 'Minimote Button 4 Held'
+#   trigger:
+#     - platform: event
+#       event_type: zwave.scene_activated
+#       event_data:
+#         entity_id: zwave.aeon_labs_minimote_1
+#         scene_id: 8

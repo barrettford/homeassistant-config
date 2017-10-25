@@ -12,46 +12,26 @@ homeassistant:
   temperature_unit: F
   # Pick yours from here: http://en.wikipedia.org/wiki/List_of_tz_database_time_zones
   time_zone: America/Denver
-  
+
   customize: !include customize.yaml
 
-config:
+# Show links to resources in log and frontend
+# introduction:
   
-zwave:
-  device_config: !include zwave_device_config.yaml
-  usb_path: /dev/ttyACM0
+notify:
+- name: ios_barrett_notify
+  platform: ios
+  target: !secret iphone_barrett_id
+- name: ios_erica_notify
+  platform: ios
+  target: !secret iphone_erica_id
 
-# Enables the frontend
-frontend:
+- name: iphones
+  platform: group
+  services:
+  - service: ios_barretts_iphone
+  - service: ios_ericas_iphone
 
-logger:
-  default: info
-#   default: critical
-
-http:
-  # Uncomment this to add a password (recommended!)
-  api_password: !secret http_api_password
-  # ssl_certificate: /certs/fullchain.pem
-  # ssl_key: /certs/privkey.pem
-
-# Checks for available updates
-updater:
-
-# Discover some devices automatically
-# discovery:
-
-# Allows you to issue voice commands from the frontend in enabled browsers
-conversation:
-
-# Enables support for tracking state changes over time.
-history:
-
-# View all events in a logbook
-logbook:
-
-# Track the sun
-sun:
-  
 ios:
   push:
     categories:
@@ -87,26 +67,85 @@ ios:
     #     behavior: 'textInput'
     #     textInputButtonTitle: 'Silencio!'
     #     textInputPlaceholder: 'Placeholder'
+    
+    
+# Enables the frontend
+frontend:
+
+# Enables configuration UI
+config:
+
+logger:
+  default: info
+#   default: critical
+
+http:
+  # Uncomment this to add a password (recommended!)
+  api_password: !secret http_api_password
+  # ssl_certificate: /certs/fullchain.pem
+  # ssl_key: /certs/privkey.pem
   
-ecobee:
-  api_key: !secret ecobee_api_key
-  hold_temp: false # optional, default is false
+  # Secrets are defined in the file secrets.yaml
+  # api_password: !secret http_password
+  # Uncomment this if you are using SSL/TLS, running in Docker container, etc.
+  # base_url: example.duckdns.org:8123
+
+# Checks for available updates
+# Note: This component will send some information about your system to
+# the developers to assist with development of Home Assistant.
+# For more information, please see:
+# https://home-assistant.io/blog/2016/10/25/explaining-the-updater/
+#updater:
+  # Optional, allows Home Assistant developers to focus on popular components.
+  # include_used_components: true
+
+# Discover some devices automatically
+# discovery:
+
+# Allows you to issue voice commands from the frontend in enabled browsers
+#conversation:
+
+# Enables support for tracking state changes over time
+history:
+
+# View all events in a logbook
+logbook:
+
+# Track the sun
+sun:
   
-zone:
-- name: Home
-  latitude: !secret home_latitude
-  longitude: !secret home_longitude
-  radius: 40
-  icon: mdi:home
+device_tracker:
+- platform: netgear
+  host: routerlogin.net
+  username: !secret device_tracker_netgear_username
+  password: !secret device_tracker_netgear_password
+  port: 5000
+  # Optional configuration
 
-- name: Work
-  latitude: !secret work_latitude
-  longitude: !secret work_longitude
-  radius: 270
-  icon: mdi:factory
+  # If new discovered devices are tracked by default (default: yes)
+  track_new_devices: no
+  # Seconds between each scan for new devices (default: 12)
+  interval_seconds: 12
+  # Seconds to wait till marking someone as not home after not being seen
+  # (default: 180)
+  consider_home: 180
 
-# Weather Prediction
+# Use mosquitto
+mqtt:
+  broker: mqtt-broker
+  port: 1883
+  client_id: home-assistant
+  keepalive: 60
+  protocol: 3.1
 
+media_player:
+- platform: kodi
+  host: !secret raspberry_pie_ip
+  name: ProtoPie
+  username: !secret raspberry_pie_username
+  password: !secret raspberry_pie_password
+  turn_off_action: suspend
+  
 switch:
 - platform: mqtt
   name: "Living Room"
@@ -132,22 +171,54 @@ switch:
   payload_on: "on"
   payload_off: "off"
   retain: true
-    
-sensor:
-# - platform: synologydsm
-#   host: !secret synology_local_ip_1
-#   port: !secret synology_http_port
-#   username: !secret synology_username
-#   password: !secret synology_password
-#   monitored_conditions:
-#   - cpu_total_load
-#   - memory_real_usage
-#   - network_up
-#   - network_down
-#   - disk_temp
-#   - volume_status
-#   - volume_percentage_used
 
+
+camera:
+- platform: synology
+  url: !secret synology_url
+  username: !secret synology_username
+  password: !secret synology_password
+  verify_ssl: False
+  timeout: 20
+
+- platform: local_file
+  name: KSL Utah County Microcast
+  file_path: /config/download/microProvo_new.jpg
+- platform: local_file
+  name: KSL Provo 7-day Forecast
+  file_path: /config/download/7provo_new.jpg
+
+binary_sensor:
+- platform: template
+  sensors:
+    # barrett_iphone_is_home:
+    #   value_template: "{%- is_state("device_tracker.barretts_iphone", "home") -%}"
+    #   entity_id:
+    #   - device_tracker.barretts_iphone
+    # erica_iphone_is_home:
+    #   value_template: "{%- is_state("device_tracker.ericas_iphone", "home") -%}"
+    #   entity_id:
+    #   - device_tracker.ericas_iphone
+    home_secure:
+      value_template: >-
+        {%- if is_state("lock.back_deadbolt_locked", "unlocked")
+        or is_state("lock.front_deadbolt_locked", "unlocked")
+        or is_state("lock.garage_deadbolt_locked", "unlocked")
+        or is_state("lock.kitchen_deadbolt_locked", "unlocked")
+            -%}
+        False
+        {%- else -%}
+        True
+        {%- endif %}
+      entity_id:
+      - lock.back_door_lock_locked
+      - lock.front_deadbolt_locked
+      - lock.garage_deadbolt_locked
+      - lock.kitchen_deadbolt_locked
+
+
+# Weather prediction
+sensor:
 - platform: darksky
   api_key: !secret darksky_api_key
   name: ""
@@ -171,264 +242,40 @@ sensor:
   - minutely_summary
   - hourly_summary
   - daily_summary
+#  - platform: yr
 
-binary_sensor:
-- platform: template
-  sensors:
-    # barrett_iphone_is_home:
-    #   value_template: "{%- is_state("device_tracker.barretts_iphone", "home") -%}"
-    #   entity_id:
-    #   - device_tracker.barretts_iphone
-    # erica_iphone_is_home:
-    #   value_template: "{%- is_state("device_tracker.ericas_iphone", "home") -%}"
-    #   entity_id:
-    #   - device_tracker.ericas_iphone
-    home_secure:
-      value_template: >-
-        {%- if is_state("lock.front_door_lock_locked_2_0", "unlocked")
-        or is_state("lock.back_door_lock_locked_3_0", "unlocked")
-        or is_state("lock.kitchen_door_lock_locked_4_0", "unlocked")
-        or is_state("lock.garage_door_lock_locked_5_0", "unlocked")
-            -%}
-        False
-        {%- else -%}
-        True
-        {%- endif %}
-      entity_id:
-      - lock.front_door_lock_locked_2_0
-      - lock.back_door_lock_locked_3_0
-      - lock.kitchen_door_lock_locked_4_0
-      - lock.garage_door_lock_locked_5_0
-
-mqtt:
-  broker: mqtt-broker
-  port: 1883
-  client_id: home-assistant
-  keepalive: 60
-  protocol: 3.1
+# Text to speech
+# tts:
+# - platform: google
   
-media_player:
-- platform: kodi
-  host: 192.168.1.102
-  name: ProtoPie
-  username: !secret raspberry_pie_username
-  password: !secret raspberry_pie_password
-  turn_off_action: suspend
-
-device_tracker:
-- platform: netgear
-  host: routerlogin.net
-  username: !secret device_tracker_netgear_username
-  password: !secret device_tracker_netgear_password
-  port: 5000
-  # Optional configuration
-
-  # If new discovered devices are tracked by default (default: yes)
-  track_new_devices: no
-  # Seconds between each scan for new devices (default: 12)
-  interval_seconds: 12
-  # Seconds to wait till marking someone as not home after not being seen
-  # (default: 180)
-  consider_home: 180
-
-# - platform: owntracks
-#   max_gps_accuracy: 100
-#   track_new_devices: yes
-#   interval_seconds: 40
-#   consider_home: 120
-
-# zoneminder:
-#   host: !secret zoneminder_host
-#   # path: /zm
-#   # path_zms: /zm/cgi-bin/nph-zms
-#   # ssl: False
-#   username: !secret camera_username
-#   password: !secret camera_password
-
-
-
-camera:
-# - platform: zoneminder
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.10/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Front Room
-#   username: !secret camera_username
-#   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.11/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Dining Room
-#   username: !secret camera_username
-#   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.12/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Garage
-#   username: !secret camera_username
-#   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.20/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Front Door
-#   username: !secret camera_username
-#   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.21/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Driveway
-#   username: !secret camera_username
-#   password: !secret camera_password
-# - platform: mjpeg
-#   mjpeg_url: http://192.168.2.22/cgi-bin/mjpg/video.cgi?channel=0&subtype=1
-#   name: Back Yard
-#   username: !secret camera_username
-#   password: !secret camera_password
-  
-
-- platform: synology
-  url: !secret synology_url
-  username: !secret synology_username
-  password: !secret synology_password
-  verify_ssl: False
-  timeout: 20
-
-- platform: local_file
-  name: KSL Utah County Microcast
-  file_path: /config/download/microProvo_new.jpg
-- platform: local_file
-  name: KSL Provo 7-day Forecast
-  file_path: /config/download/7provo_new.jpg
+ecobee:
+  api_key: !secret ecobee_api_key
+  hold_temp: false # optional, default is false
 
 shell_command:
   micro_provo: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/microProvo_new.jpg
   provo_7day: wget --continue --timestamping --directory-prefix=/config/download/ http://img.ksl.com/slc/weather/7provo_new.jpg
   # reboot: !secret reboot_command
 
-automation:
-- alias: scrape ksl
-  trigger:
-    platform: time
-    # Matches every hour at 5 minutes past whole
-    hours: '/2'
-    # minutes: '/5'
-    minutes: 0
-    seconds: 0
-  action:
-  - service: shell_command.micro_provo
-  - service: shell_command.provo_7day
+zwave:
+  device_config: !include zwave_device_config.yaml
+  usb_path: /dev/ttyACM0
   
-- alias: Minimote Button 1 Pressed
-  trigger:
-    platform: event
-    event_type: zwave.scene_activated
-    event_data:
-      entity_id: zwave.aeotec_dsa03202_minimote_12
-      scene_id: 1
-  action:
-  - service: lock.unlock
-    entity_id: lock.kwikset_touchpad_electronic_deadbolt_locked_3_0
-  - service: persistent_notification.create
-    data:
-      message: "Remote Clicked"
-      title: "Custom subject" 
 
-- alias: Erica Last to Leave Home - Lock doors
-  condition:
-  - condition: state
-    entity_id: device_tracker.barretts_iphone
-    state: 'not_home'
-  - condition: state
-    entity_id: binary_sensor.home_secure
-    state: 'off'
-  trigger:
-    platform: state
-    entity_id: device_tracker.ericas_iphone
-    from: 'home'
-    to: 'not_home'
-  action:
-    service: notify.ios_ericas_iphone
-    data:
-      message: "Doors were left unlocked!"
-      data:
-        push:
-          # badge: 1
-          # sound: <SOUND FILE HERE>
-          category: LOCK # Needs to match the top level identifier you used in the ios configuration
-        action_data: # Anything passed in action_data will get echoed back to Home Assistant.
-        #   entity_id: light.test
-        #   my_custom_data: foo_bar
-    
-- alias: Barrett Last to Leave Home - Lock doors
-  condition:
-  - condition: template
-    value_template: "{{ not is_state('device_tracker.ericas_iphone', 'home') }}"
-  - condition: state
-    entity_id: binary_sensor.home_secure
-    state: 'off'
-  trigger:
-    platform: zone
-    entity_id: device_tracker.barretts_iphone
-    zone: zone.home
-    # Event is either enter or leave
-    event: leave  # or "enter"
-  action:
-    service: notify.ios_barretts_iphone
-    data:
-      message: "Doors were left unlocked!"
-      data:
-        push:
-          # badge: 1
-          # sound: <SOUND FILE HERE>
-          category: LOCK # Needs to match the top level identifier you used in the ios configuration
-        action_data: # Anything passed in action_data will get echoed back to Home Assistant.
-        #   entity_id: light.test
-        #   my_custom_data: foo_bar
-    
-- alias: Lock the Doors
-  trigger:
-    platform: event
-    event_type: ios.notification_action_fired
-    event_data:
-      actionName: LOCK_DOORS
-  action:
-    service: lock.lock
-    entity_id: group.locks
-# - alias: Family Away - Arm Alarms
-#   condition:
-#   - condition: state
-#     entity_id: group.people
-#     state: 'not_home'
-#   trigger:
-#   - platform: state
-#     entity_id: group.motion_sensors
-#     to: 'on'
-#     from: 'off'
-#   action:
-#   - service: lock.lock
-#     entity_id: group.locks
-  # - service: persistent_notification.create
-  #   data:
-  #     message: >
-  #       Motion Trackers went from {{ trigger.from_state.state }}
-  #       to {{ trigger.to_state.state }}
-  #     title: "ALARM!"
-notify:
-- name: ios_barrett_notify
-  platform: ios
-  target: !secret iphone_barrett_id
-- name: ios_erica_notify
-  platform: ios
-  target: !secret iphone_erica_id
+zone:
+- name: Home
+  latitude: !secret home_latitude
+  longitude: !secret home_longitude
+  radius: 40
+  icon: mdi:home
 
-- name: iphones
-  platform: group
-  services:
-  - service: ios_barretts_iphone
-  - service: ios_ericas_iphone
+- name: Work
+  latitude: !secret work_latitude
+  longitude: !secret work_longitude
+  radius: 270
+  icon: mdi:factory
 
 
-# notify:
-# - name: ALL_PHONES
-#   platform: group
-#   services:
-#   - service: ios_iphone_one
-#   - service: ios_iphone_two
-
-
-group: !include group.yaml
+group: !include groups.yaml
+automation: !include automations.yaml
+script: !include scripts.yaml

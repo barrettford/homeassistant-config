@@ -1,5 +1,5 @@
-default_view:
-# regular:
+# default_view:
+regular:
   icon: mdi:home
   view: yes
   entities:
@@ -63,59 +63,58 @@ debug:
 locks:
   name: Locks
   entities:
-  - lock.front_door_lock_locked_2_0
-  - lock.back_door_lock_locked_3_0
-  - lock.kitchen_door_lock_locked_4_0
-  - lock.garage_door_lock_locked_5_0
+  - lock.front_deadbolt_locked
+  - lock.back_deadbolt_locked
+  - lock.kitchen_deadbolt_locked
+  - lock.garage_deadbolt_locked
   
 motion_sensors:
   name: Motion Sensors
   entities:
-  - binary_sensor.aeotec_zw100_multisensor_6_sensor_8_0
-  - binary_sensor.aeotec_zw100_multisensor_6_sensor_9_0
-  - binary_sensor.aeotec_zw100_multisensor_6_sensor_10_0
-  - binary_sensor.aeotec_zw100_multisensor_6_sensor_11_0
+  - binary_sensor.dining_room_sensor
+  - binary_sensor.downstairs_sensor
+  - binary_sensor.front_room_sensor
+  - binary_sensor.garage_sensor
   
 temperature_sensors:
   name: Temperature Sensors
   entities:
-  - sensor.aeotec_zw100_multisensor_6_temperature_8_1
-  - sensor.aeotec_zw100_multisensor_6_temperature_9_1
-  - sensor.aeotec_zw100_multisensor_6_temperature_10_1
-  - sensor.aeotec_zw100_multisensor_6_temperature_11_1
+  - sensor.dining_room_temperature
+  - sensor.downstairs_temperature
+  - sensor.front_room_temperature
+  - sensor.garage_temperature
   
 humidity_sensors:
   name: Humidity Sensors
   entities:
-  - sensor.aeotec_zw100_multisensor_6_relative_humidity_8_5
-  - sensor.aeotec_zw100_multisensor_6_relative_humidity_9_5
-  - sensor.aeotec_zw100_multisensor_6_relative_humidity_10_5
-  - sensor.aeotec_zw100_multisensor_6_relative_humidity_11_5
+  - sensor.dining_room_relative_humidity
+  - sensor.downstairs_relative_humidity
+  - sensor.front_room_relative_humidity
+  - sensor.garage_relative_humidity
   
 burglar_sensors:
   name: Burglar Sensors
   entities:
-  - sensor.aeotec_zw100_multisensor_6_burglar_8_10
-  - sensor.aeotec_zw100_multisensor_6_burglar_9_10
-  - sensor.aeotec_zw100_multisensor_6_burglar_10_10
-  - sensor.aeotec_zw100_multisensor_6_burglar_11_10
+  - sensor.dining_room_burglar
+  - sensor.downstairs_burglar
+  - sensor.front_room_burglar
+  - sensor.garage_burglar
   
 luminance_sensors:
   name: Luminance Sensors
   entities:
-  - sensor.aeotec_zw100_multisensor_6_luminance_8_3
-  - sensor.aeotec_zw100_multisensor_6_luminance_9_3
-  - sensor.aeotec_zw100_multisensor_6_luminance_10_3
-  - sensor.aeotec_zw100_multisensor_6_luminance_11_3
+  - sensor.dining_room_luminance
+  - sensor.downstairs_luminance
+  - sensor.front_room_luminance
+  - sensor.garage_luminance
   
 ultraviolet_sensors:
   name: Ultraviolet Sensors
   entities:
-  - sensor.aeotec_zw100_multisensor_6_ultraviolet_8_27
-  - sensor.aeotec_zw100_multisensor_6_ultraviolet_9_27
-  - sensor.aeotec_zw100_multisensor_6_ultraviolet_10_27
-  - sensor.aeotec_zw100_multisensor_6_ultraviolet_11_27
-  
+  - sensor.dining_room_ultraviolet
+  - sensor.downstairs_ultraviolet
+  - sensor.front_room_ultraviolet
+  - sensor.garage_ultraviolet
 
 
 people:
@@ -138,13 +137,12 @@ cameras_outdoor:
   - camera.front_door
   - camera.driveway
   - camera.backyard
-
   
 sirens:
   name: Sirens
   entities:
-  - switch.aeotec_zw080_siren_gen5_switch_6_0
-  - switch.aeotec_zw080_siren_gen5_switch_7_0
+  - switch.bedroom_siren_switch
+  - switch.kitchen_siren_switch
   
 weather:
   entities:
@@ -155,6 +153,7 @@ weather:
   - sensor._wind_speed
   - sensor._precip_probability
   - sensor._precip_type
+  - sensor._humidity
   - sensor._minutely_summary
   - sensor._hourly_summary
   - sensor._daily_summary
